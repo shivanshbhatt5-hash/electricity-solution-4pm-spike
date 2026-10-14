@@ -1,0 +1,16 @@
+{
+  "name": "campuspulse-ai-iot-energy-optimization",
+  "version": "2.0.0",
+  "description": "CampusPulse AI — IoT-Based Smart Campus Energy Monitoring and Peak-Demand Optimization System",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "three": "^0.186.1",
+    "ws": "^8.18.0"
+  }
+}
