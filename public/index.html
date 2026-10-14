@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Architecture & Overview // CampusPulse AI Smart Campus Energy</title>
+  <meta name="description" content="CampusPulse AI — IoT-Based Smart Campus Energy Monitoring and Peak-Demand Optimization System with ESP32 edge telemetry, simulated rooftop solar, and critical-load continuity protection.">
+  
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  
+  <!-- Three.js for 3D Prototype Viewer -->
+  <script src="js/three.min.js"></script>
+  <!-- Chart.js for Live Diurnal Curve -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Global Navigation Bar (5 Modules) -->
+  <nav class="global-navbar" aria-label="Main Navigation">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">
+        <div class="brand-icon" style="background: linear-gradient(135deg, #0284c7 0%, #10b981 100%);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <div class="brand-text">
+          <h1>CampusPulse AI</h1>
+          <span>Smart Campus Energy & Peak Optimization</span>
+        </div>
+      </a>
+
+      <ul class="nav-menu">
+        <li>
+          <a href="index.html" class="nav-link active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            1. Architecture & Overview
+          </a>
+        </li>
+        <li>
+          <a href="zone-analytics.html" class="nav-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            2. Zone Consumption & Data Quality
+          </a>
+        </li>
+        <li>
+          <a href="load-optimization.html" class="nav-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            3. Peak Optimization & Control
+          </a>
+        </li>
+        <li>
+          <a href="campus-map.html" class="nav-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            4. Campus Energy Map
+          </a>
+        </li>
+        <li>
+          <a href="sustainability-analytics.html" class="nav-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            5. Savings & Sustainability
+          </a>
+        </li>
+      </ul>
+
+      <div class="nav-controls">
+        <div class="global-status-badge" id="globalSystemStatusBadge" title="ESP32 Edge Node & Server State">
+          <span class="status-dot online"></span>
+          <span class="status-text">ESP32 Synced</span>
+        </div>
+        <!-- Theme Toggle Button -->
+        <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Theme (Light / Cyber Dark)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Live Telemetry Ticker Ribbon -->
+  <div class="live-telemetry-ticker">
+    <div class="ticker-items-row">
+      <div class="ticker-pill">
+        <span class="ticker-label">CAMPUS GROSS:</span>
+        <span class="ticker-val" id="tickerGross" style="color: #0284c7;">1215.4 kW</span>
+      </div>
+      <div class="ticker-pill">
+        <span class="ticker-label">ROOFTOP SOLAR:</span>
+        <span class="ticker-val" id="tickerSolar" style="color: #f59e0b;">☀️ 68.2 kW</span>
+      </div>
+      <div class="ticker-pill">
+        <span class="ticker-label">NET GRID IMPORT:</span>
+        <span class="ticker-val" id="tickerNet" style="color: #f43f5e;">1147.2 kW</span>
+      </div>
+      <div class="ticker-pill">
+        <span class="ticker-label">PEAK STATUS:</span>
+        <span class="ticker-val" id="tickerStatus" style="color: #f43f5e;">PEAK BREACH (>1000 kW)</span>
+      </div>
+      <div class="ticker-pill">
+        <span class="ticker-label">ESP32 DEMO LOAD:</span>
+        <span class="ticker-val" id="tickerPrototype" style="color: #0284c7;">3.60 A (FULL)</span>
+      </div>
+      <div class="ticker-pill">
+        <span class="ticker-label">DATA QUALITY:</span>
+        <span class="ticker-val" id="tickerDQ" style="color: #10b981;">98.7% PRR</span>
+      </div>
+    </div>
+    <div style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">
+      ESP32 Wi-Fi Stream • 1000ms WebSocket
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <main class="content-area">
+    <header class="page-header">
+      <div class="header-title-group">
+        <span class="header-badge-tag">Page 1 // System Topology & 3D Miniature Testbed</span>
+        <h1>CampusPulse AI Architecture & Overview</h1>
+        <p>IoT-based energy monitoring, late-afternoon rooftop solar decline tracking, and peak-demand optimization with zero disruption to mission-critical campus facilities.</p>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <button class="btn-inject-fault" onclick="window.location.href='load-optimization.html'" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+          Decision Control Panel
+        </button>
+        <button class="btn-inject-fault" onclick="window.location.href='zone-analytics.html'" style="background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border-subtle);">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          Zone Analytics
+        </button>
+      </div>
+    </header>
+
+    <!-- Key Performance Highlights Row -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+      <div class="float-card levitate-subtle" style="padding: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Sanctioned Demand Limit</span>
+          <span style="font-size: 1.2rem;">⚡</span>
+        </div>
+        <div style="font-size: 1.6rem; font-weight: 800; font-family: var(--font-mono); color: var(--text-main); margin-top: 0.35rem;">1,000 kW</div>
+        <div style="font-size: 0.78rem; color: #f43f5e; margin-top: 0.25rem;">Current Net: 1,147 kW (+14.7% Breach)</div>
+      </div>
+
+      <div class="float-card levitate-subtle" style="padding: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Solar Drop-Off (4-7 PM)</span>
+          <span style="font-size: 1.2rem;">☀️</span>
+        </div>
+        <div style="font-size: 1.6rem; font-weight: 800; font-family: var(--font-mono); color: #f59e0b; margin-top: 0.35rem;">68.2 kW</div>
+        <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.25rem;">Down from 340 kW Peak Solar at Noon</div>
+      </div>
+
+      <div class="float-card levitate-subtle" style="padding: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">AI Shaving Potential</span>
+          <span style="font-size: 1.2rem;">🎯</span>
+        </div>
+        <div style="font-size: 1.6rem; font-weight: 800; font-family: var(--font-mono); color: #10b981; margin-top: 0.35rem;">194.0 kW</div>
+        <div style="font-size: 0.78rem; color: #10b981; margin-top: 0.25rem;">Saves ₹27,300/day + Avoids Peak Penalty</div>
+      </div>
+
+      <div class="float-card levitate-subtle" style="padding: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Critical Load Guarantee</span>
+          <span style="font-size: 1.2rem;">🔒</span>
+        </div>
+        <div style="font-size: 1.6rem; font-weight: 800; font-family: var(--font-mono); color: #10b981; margin-top: 0.35rem;">100.0%</div>
+        <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.25rem;">Data Center & Research Labs Protected</div>
+      </div>
+    </div>
+
+    <!-- Split-Screen Layout: Microgrid Flow & 3D Miniature Prototype -->
+    <div class="split-screen-container">
+      
+      <!-- Side 1: Interactive Campus Microgrid Diagram -->
+      <section class="float-card levitate-delay-1" aria-labelledby="circuitHeading">
+        <div class="card-header-bar">
+          <div class="card-title-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 21V9a9 9 0 0 0 9 9"/></svg>
+            <h2 id="circuitHeading">Campus Microgrid & Energy Flow</h2>
+          </div>
+          <span class="header-badge-tag">Live Power Flow</span>
+        </div>
+
+        <div class="circuit-canvas-wrapper">
+          <canvas id="circuitCanvas" width="600" height="420"></canvas>
+        </div>
+
+        <div class="circuit-legend">
+          <div class="legend-item">
+            <span class="legend-color-dot" style="background: #0284c7;"></span>
+            <span>11kV Grid Incomer</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color-dot" style="background: #f59e0b;"></span>
+            <span>Rooftop Solar Injection</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color-dot" style="background: #f43f5e;"></span>
+            <span>Flexible Evening Peak Load</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color-dot" style="background: #10b981;"></span>
+            <span>Protected Research & Server Branch</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Side 2: Photorealistic 3D Miniature Prototype Testbed -->
+      <section class="float-card levitate" aria-labelledby="prototype3DHeading">
+        <div class="card-header-bar">
+          <div class="card-title-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            <h2 id="prototype3DHeading">Miniature ESP32 Testbed Prototype (3D)</h2>
+          </div>
+          <span class="header-badge-tag" style="background: var(--accent-emerald-light); color: var(--accent-emerald);">Hardware Digital Twin</span>
+        </div>
+
+        <div class="threed-model-container" id="prototype3DContainer">
+          <div class="threed-model-badge">
+            <span class="glow-pulse"></span>
+            <span>ESP32 Physical Load Controller</span>
+          </div>
+          <div class="threed-overlay-controls">
+            <button class="threed-control-btn" id="btnTogglePrototypeAutoRotate">Auto-Orbit: ON</button>
+            <button class="threed-control-btn" id="btnTogglePrototypeWireframe">Wireframe</button>
+            <button class="threed-control-btn" id="btnResetPrototypeCamera">Reset View</button>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.15rem; font-size: 0.86rem; color: var(--text-secondary); line-height: 1.55;">
+          <p>
+            <strong>Hardware Testbed Validation:</strong> Features an <b>ESP32 microcontroller</b> with Wi-Fi telemetry, dual <b>ACS712 current sensors</b>, 
+            and an active relay demonstrating low-voltage DC flexible load shedding (e.g. simulated cooling fan) 
+            while keeping the protected lab simulator circuit permanently powered.
+            <em>Drag to rotate 360°, scroll to zoom.</em>
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <!-- Diurnal Demand & Rooftop Solar 24-Hour Interactive Graph -->
+    <section class="float-card levitate-delay-2" style="margin-top: 1.5rem;">
+      <div class="card-header-bar">
+        <div class="card-title-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg>
+          <h2>24-Hour Campus Demand & Rooftop Solar Generation Profile</h2>
+        </div>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <span class="solar-pill">☀️ Solar Capacity: 400 kWp</span>
+          <span class="header-badge-tag" style="background: rgba(244, 63, 94, 0.1); color: #f43f5e;">Late Afternoon Peak: 16:00 - 20:00</span>
+        </div>
+      </div>
+
+      <div style="position: relative; height: 320px; width: 100%; margin-top: 1rem;">
+        <canvas id="diurnalChartCanvas"></canvas>
+      </div>
+
+      <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; font-size: 0.82rem; color: var(--text-muted);">
+        <div style="display: flex; gap: 1.25rem; flex-wrap: wrap;">
+          <span style="display: flex; align-items: center; gap: 6px;">
+            <span style="width: 14px; height: 3px; background: #0284c7; display: inline-block;"></span> <b>Gross Campus Demand (kW)</b>
+          </span>
+          <span style="display: flex; align-items: center; gap: 6px;">
+            <span style="width: 14px; height: 3px; background: #f59e0b; display: inline-block;"></span> <b>Rooftop Solar Output (kW)</b>
+          </span>
+          <span style="display: flex; align-items: center; gap: 6px;">
+            <span style="width: 14px; height: 3px; background: #f43f5e; display: inline-block;"></span> <b>Net Grid Demand (Spike Breach)</b>
+          </span>
+          <span style="display: flex; align-items: center; gap: 6px;">
+            <span style="width: 14px; height: 3px; background: #10b981; display: inline-block; border-top: 2px dashed #10b981;"></span> <b>Optimized Demand (Safe Ceiling)</b>
+          </span>
+        </div>
+        <button class="btn-approve-rec" onclick="window.location.href='load-optimization.html'">
+          Engage Load Optimization
+        </button>
+      </div>
+    </section>
+
+    <!-- CampusPulse AI Architecture 3-Pillar Foundation -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+      <div class="float-card levitate-delay-1">
+        <div class="card-title-wrap" style="margin-bottom: 0.75rem;">
+          <span style="font-size: 1.5rem;">📡</span>
+          <h3>1. IoT Edge Sensing Layer</h3>
+        </div>
+        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+          An <b>ESP32 microcontroller</b> with current sensors samples electrical parameters from a demonstration load, while digital submeters collect building-wise consumption across Academic, Hostel, and Laboratory zones with continuous packet-health validation.
+        </p>
+      </div>
+
+      <div class="float-card levitate-delay-2">
+        <div class="card-title-wrap" style="margin-bottom: 0.75rem;">
+          <span style="font-size: 1.5rem;">🧠</span>
+          <h3>2. Peak Prediction & AI Decision Engine</h3>
+        </div>
+        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+          Detects late-afternoon solar decline and forecasts upcoming 4:00 PM – 9:00 PM demand spikes. Generates non-disruptive recommendations (chiller setpoint adjustments, hostel water heater staggering, decorative lighting trim).
+        </p>
+      </div>
+
+      <div class="float-card levitate-delay-3">
+        <div class="card-title-wrap" style="margin-bottom: 0.75rem;">
+          <span style="font-size: 1.5rem;">🛡️</span>
+          <h3>3. Zero-Disruption Protection</h3>
+        </div>
+        <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+          Ensures mission-critical research laboratory equipment (cryo-freezers, fume hoods, lasers) and university server clusters are hardwired with unbreakable safety locks, completely protected from load-shedding actions.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="global-footer">
+    <div class="footer-inner">
+      <div>
+        <strong>CampusPulse AI</strong> &mdash; IoT-Based Smart Campus Energy Monitoring and Peak-Demand Optimization System
+      </div>
+      <div class="footer-system-badges">
+        <div class="footer-badge-item">
+          <span class="status-dot online"></span>
+          <span>ESP32 Node: 192.168.1.142</span>
+        </div>
+        <div class="footer-badge-item">
+          <span class="status-dot online"></span>
+          <span>Data Quality: 98.7% PRR</span>
+        </div>
+        <div class="footer-badge-item">
+          <span class="status-dot online"></span>
+          <span>Web Platform: v2.5.0</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script src="js/3d-models.js"></script>
+  <script src="js/circuit.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Initialize Microgrid Canvas
+      new InteractiveCampusMicrogrid('circuitCanvas');
+
+      // 2. Initialize 3D Prototype Viewer
+      if (window.VoltGuard3D && VoltGuard3D.initPrototypeViewer) {
+        VoltGuard3D.initPrototypeViewer('prototype3DContainer');
+      }
+
+      // 3. Initialize Diurnal Demand & Rooftop Solar Chart
+      initDiurnalChart();
+    });
+
+    function initDiurnalChart() {
+      const canvas = document.getElementById('diurnalChartCanvas');
+      if (!canvas || !window.Chart) return;
+
+      const hours = [];
+      const grossDemand = [];
+      const solarGen = [];
+      const netGrid = [];
+      const optimizedGrid = [];
+
+      fetch('/api/telemetry')
+        .then(res => res.json())
+        .then(data => {
+          const profile = data.diurnalProfile || [];
+          profile.forEach(p => {
+            hours.push(p.timeLabel);
+            grossDemand.push(p.grossDemandKW);
+            solarGen.push(p.solarGenerationKW);
+            netGrid.push(p.netGridDemandKW);
+            optimizedGrid.push(p.optimizedGridDemandKW);
+          });
+
+          renderChart(canvas, hours, grossDemand, solarGen, netGrid, optimizedGrid);
+        })
+        .catch(() => {
+          // Fallback initial data
+          for (let h = 0; h < 24; h++) {
+            hours.push(`${h.toString().padStart(2, '0')}:00`);
+            grossDemand.push(h >= 16 && h <= 20 ? 1220 : 850);
+            solarGen.push(h >= 7 && h <= 18 ? Math.round(300 * Math.sin((h-7)/11 * Math.PI)) : 0);
+            netGrid.push(grossDemand[h] - solarGen[h]);
+            optimizedGrid.push(netGrid[h] > 1000 ? 980 : netGrid[h]);
+          }
+          renderChart(canvas, hours, grossDemand, solarGen, netGrid, optimizedGrid);
+        });
+    }
+
+    function renderChart(canvas, hours, grossDemand, solarGen, netGrid, optimizedGrid) {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const gridColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.06)';
+      const textColor = isDark ? '#94a3b8' : '#0f172a';
+
+      new Chart(canvas.getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: hours,
+          datasets: [
+            {
+              label: 'Gross Campus Demand (kW)',
+              data: grossDemand,
+              borderColor: '#0284c7',
+              backgroundColor: 'rgba(2, 132, 199, 0.06)',
+              borderWidth: 2.5,
+              tension: 0.35,
+              fill: false
+            },
+            {
+              label: 'Rooftop Solar Output (kW)',
+              data: solarGen,
+              borderColor: '#f59e0b',
+              backgroundColor: 'rgba(245, 158, 11, 0.15)',
+              borderWidth: 2.5,
+              tension: 0.35,
+              fill: true
+            },
+            {
+              label: 'Net Grid Demand (Spike Breach)',
+              data: netGrid,
+              borderColor: '#f43f5e',
+              backgroundColor: 'rgba(244, 63, 94, 0.08)',
+              borderWidth: 2.5,
+              tension: 0.35,
+              fill: false
+            },
+            {
+              label: 'Optimized Demand (CampusPulse AI)',
+              data: optimizedGrid,
+              borderColor: '#10b981',
+              borderDash: [5, 5],
+              borderWidth: 2.5,
+              tension: 0.35,
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              backgroundColor: isDark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+              titleColor: isDark ? '#f8fafc' : '#0f172a',
+              bodyColor: isDark ? '#cbd5e1' : '#334155',
+              borderColor: 'rgba(2, 132, 199, 0.25)',
+              borderWidth: 1,
+              padding: 12,
+              boxPadding: 6,
+              callbacks: {
+                label: (ctx) => `${ctx.dataset.label}: ${ctx.raw} kW`
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: gridColor },
+              ticks: { color: textColor, font: { family: 'JetBrains Mono', size: 10 } }
+            },
+            y: {
+              grid: { color: gridColor },
+              ticks: {
+                color: textColor,
+                font: { family: 'JetBrains Mono', size: 10 },
+                callback: (val) => `${val} kW`
+              }
+            }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>

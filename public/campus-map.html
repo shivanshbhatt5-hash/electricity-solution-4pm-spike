@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Energy Map & Peak Alerts // CampusPulse AI</title>
+  <meta name="description" content="Interactive geographical campus energy map visualizing building zones, rooftop solar arrays, and automated peak-demand alerts.">
+  
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/leaflet.css">
+  <script src="js/leaflet.js"></script>
+</head>
+<body>
+
+  <!-- Global Navigation Bar -->
+  <nav class="global-navbar" aria-label="Main Navigation">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">
+        <div class="brand-icon" style="background: linear-gradient(135deg, #0284c7 0%, #10b981 100%);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <div class="brand-text">
+          <h1>CampusPulse AI</h1>
+          <span>Smart Campus Energy & Peak Optimization</span>
+        </div>
+      </a>
+
+      <ul class="nav-menu">
+        <li>
+          <a href="index.html" class="nav-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            1. Architecture & Overview
+          </a>
+        </li>
+        <li>
+          <a href="zone-analytics.html" class="nav-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            2. Zone Consumption & Data Quality
+          </a>
+        </li>
+        <li>
+          <a href="load-optimization.html" class="nav-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            3. Peak Optimization & Control
+          </a>
+        </li>
+        <li>
+          <a href="campus-map.html" class="nav-link active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            4. Campus Energy Map
+          </a>
+        </li>
+        <li>
+          <a href="sustainability-analytics.html" class="nav-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            5. Savings & Sustainability
+          </a>
+        </li>
+      </ul>
+
+      <div class="nav-controls">
+        <div class="global-status-badge" id="globalSystemStatusBadge">
+          <span class="status-dot online"></span>
+          <span class="status-text">ESP32 Synced</span>
+        </div>
+        <button class="theme-toggle-btn" id="themeToggleBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Live Telemetry Ribbon -->
+  <div class="live-telemetry-ticker">
+    <div class="ticker-items-row">
+      <div class="ticker-pill">
+        <span class="ticker-label">CAMPUS GROSS:</span>
+        <span class="ticker-val" id="tickerGross" style="color: #0284c7;">1215.4 kW</span>
+      </div>
+      <div class="ticker-pill">
+        <span class="ticker-label">ROOFTOP SOLAR:</span>
+        <span class="ticker-val" id="tickerSolar" style="color: #f59e0b;">☀️ 68.2 kW</span>
+      </div>
+      <div class="ticker-pill">
+        <span class="ticker-label">NET GRID IMPORT:</span>
+        <span class="ticker-val" id="tickerNet" style="color: #f43f5e;">1147.2 kW</span>
+      </div>
+      <div class="ticker-pill">
+        <span class="ticker-label">PEAK STATUS:</span>
+        <span class="ticker-val" id="tickerStatus" style="color: #f43f5e;">PEAK BREACH</span>
+      </div>
+      <div class="ticker-pill">
+        <span class="ticker-label">MAP ENGINE:</span>
+        <span class="ticker-val" style="color: #10b981;">LEAFLET GEO-SPATIAL</span>
+      </div>
+    </div>
+    <div style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">
+      GPS Mesh • 1000ms WebSocket
+    </div>
+  </div>
+
+  <main class="content-area">
+    <header class="page-header">
+      <div class="header-title-group">
+        <span class="header-badge-tag">Page 4 // Spatial Telemetry & Alerts</span>
+        <h1>Campus Energy Map & Peak Alert Center</h1>
+        <p>Interactive spatial map of university buildings, rooftop solar installations, distribution substations, and automated peak incident notifications.</p>
+      </div>
+
+      <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <span class="solar-pill">☀️ Total Solar Capacity: 400 kWp</span>
+      </div>
+    </header>
+
+    <!-- Split-Screen Layout: Campus Map + Alerts Feed -->
+    <div class="map-tracking-grid">
+      
+      <!-- Left Column: Interactive Leaflet Campus Map -->
+      <section class="map-container-card levitate-delay-1" aria-labelledby="mapHeading">
+        <div class="card-header-bar">
+          <div class="card-title-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+            <h2 id="mapHeading">University Campus Microgrid Map</h2>
+          </div>
+          <span class="header-badge-tag">Interactive Zones</span>
+        </div>
+
+        <div style="position: relative; width: 100%; height: 520px; border-radius: 16px; overflow: hidden; border: 1px solid var(--border-subtle); margin-top: 0.75rem;">
+          <div id="campusLeafletMap" style="width: 100%; height: 100%;"></div>
+        </div>
+
+        <div class="circuit-legend" style="margin-top: 0.85rem;">
+          <div class="legend-item">
+            <span class="legend-color-dot" style="background: #0284c7;"></span>
+            <span>Normal Academic Load</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color-dot" style="background: #f43f5e;"></span>
+            <span>Peak Demand Spike (Hostels/Chiller)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color-dot" style="background: #10b981;"></span>
+            <span>🔒 Protected Server/Lab</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color-dot" style="background: #f59e0b;"></span>
+            <span>☀️ Rooftop Solar Installation</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Automated Peak-Demand Alerts & Dispatch Feed -->
+      <section class="gateway-console-card levitate" aria-labelledby="alertsHeading">
+        <div class="gateway-header-strip">
+          <div class="card-title-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <h2 id="alertsHeading">Peak Alerts & Dispatch</h2>
+          </div>
+          <span class="vibhaag-badge">Automated Gateway</span>
+        </div>
+
+        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem; line-height: 1.5;">
+          Automated decision notifications transmitting threshold breaches and AI load scheduling alerts to facility managers and hostel wardens.
+        </div>
+
+        <div class="dispatched-feed-scroll" id="dispatchedAlertsFeed" style="max-height: 440px; overflow-y: auto;">
+          <!-- Dynamically populated via campus-map.js -->
+        </div>
+
+        <div style="margin-top: auto; padding-top: 0.85rem; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: var(--text-muted);">
+          <span>Notification Channel: SMS + Webhook + SCADA</span>
+          <span style="color: var(--accent-emerald); font-weight: 700;">GATEWAY ACTIVE [ONLINE]</span>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="global-footer">
+    <div class="footer-inner">
+      <div>
+        <strong>CampusPulse AI</strong> &mdash; Campus Energy Map & Dispatch Center
+      </div>
+      <div class="footer-system-badges">
+        <div class="footer-badge-item">
+          <span class="status-dot online"></span>
+          <span>Leaflet Geo Engine: Active</span>
+        </div>
+        <div class="footer-badge-item">
+          <span class="status-dot online"></span>
+          <span>OpenStreetMap: Connected</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script src="js/campus-map.js"></script>
+</body>
+</html>

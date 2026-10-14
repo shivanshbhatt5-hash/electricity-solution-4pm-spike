@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Savings, Baseline vs Optimized & Sustainability // CampusPulse AI</title>
+  <meta name="description" content="Before-and-after performance comparisons, financial peak tariff savings, and sustainability report for CampusPulse AI smart campus.">
+  
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Global Navigation Bar -->
+  <nav class="global-navbar" aria-label="Main Navigation">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">
+        <div class="brand-icon" style="background: linear-gradient(135deg, #0284c7 0%, #10b981 100%);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <div class="brand-text">
+          <h1>CampusPulse AI</h1>
+          <span>Smart Campus Energy & Peak Optimization</span>
+        </div>
+      </a>
+
+      <ul class="nav-menu">
+        <li>
+          <a href="index.html" class="nav-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            1. Architecture & Overview
+          </a>
+        </li>
+        <li>
+          <a href="zone-analytics.html" class="nav-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            2. Zone Consumption & Data Quality
+          </a>
+        </li>
+        <li>
+          <a href="load-optimization.html" class="nav-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            3. Peak Optimization & Control
+          </a>
+        </li>
+        <li>
+          <a href="campus-map.html" class="nav-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            4. Campus Energy Map
+          </a>
+        </li>
+        <li>
+          <a href="sustainability-analytics.html" class="nav-link active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            5. Savings & Sustainability
+          </a>
+        </li>
+      </ul>
+
+      <div class="nav-controls">
+        <div class="global-status-badge" id="globalSystemStatusBadge">
+          <span class="status-dot online"></span>
+          <span class="status-text">ESP32 Synced</span>
+        </div>
+        <button class="theme-toggle-btn" id="themeToggleBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Live Telemetry Ribbon -->
+  <div class="live-telemetry-ticker">
+    <div class="ticker-items-row">
+      <div class="ticker-pill">
+        <span class="ticker-label">CAMPUS GROSS:</span>
+        <span class="ticker-val" id="tickerGross" style="color: #0284c7;">1215.4 kW</span>
+      </div>
+      <div class="ticker-pill">
+        <span class="ticker-label">ROOFTOP SOLAR:</span>
+        <span class="ticker-val" id="tickerSolar" style="color: #f59e0b;">☀️ 68.2 kW</span>
+      </div>
+      <div class="ticker-pill">
+        <span class="ticker-label">PEAK SAVINGS:</span>
+        <span class="ticker-val" style="color: #10b981;">₹27,300 / Day</span>
+      </div>
+      <div class="ticker-pill">
+        <span class="ticker-label">CARBON AVOIDED:</span>
+        <span class="ticker-val" style="color: #10b981;">2,410 kg CO2</span>
+      </div>
+      <div class="ticker-pill">
+        <span class="ticker-label">GREEN RATING:</span>
+        <span class="ticker-val" style="color: #10b981;">A+ CERTIFIED</span>
+      </div>
+    </div>
+    <div style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">
+      Financial Engine • Real-Time ROI
+    </div>
+  </div>
+
+  <main class="content-area">
+    <header class="page-header">
+      <div class="header-title-group">
+        <span class="header-badge-tag">Page 5 // Financial ROI & Sustainability Trends</span>
+        <h1>Performance Comparisons & Sustainability Report</h1>
+        <p>Quantitative evaluation of baseline vs. optimized campus scenarios across peak-demand reduction, electricity costs, critical continuity, and decarbonization.</p>
+      </div>
+
+      <button class="btn-approve-rec" onclick="window.print()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Download Sustainability Report (PDF)
+      </button>
+    </header>
+
+    <!-- Before-and-After Performance Comparison Matrix (5 Abstract Dimensions) -->
+    <div class="comparison-card-grid">
+      
+      <!-- Baseline Scenario Card -->
+      <section class="scenario-card baseline levitate-delay-1">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span class="scenario-badge">Baseline Scenario (Uncontrolled)</span>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Status Quo</span>
+        </div>
+        <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-top: 0.25rem;">Peak Demand Breach</h2>
+        <p style="font-size: 0.84rem; color: var(--text-secondary); margin-top: 0.25rem; line-height: 1.5;">
+          Uncoordinated late-afternoon cooling, hostel water heating, and laboratory power coincidence with declining solar output.
+        </p>
+
+        <div class="scenario-stat-list">
+          <div class="scenario-stat-row">
+            <span class="scenario-stat-label">1. Peak Net Demand</span>
+            <span class="scenario-stat-val" style="color: #f43f5e;">1,245.0 kW (Breach)</span>
+          </div>
+          <div class="scenario-stat-row">
+            <span class="scenario-stat-label">2. Daily Electricity Cost</span>
+            <span class="scenario-stat-val" style="color: #f43f5e;">₹1,48,500</span>
+          </div>
+          <div class="scenario-stat-row">
+            <span class="scenario-stat-label">3. Max Demand Penalty Surcharge</span>
+            <span class="scenario-stat-val" style="color: #f43f5e;">₹95,000 / month</span>
+          </div>
+          <div class="scenario-stat-row">
+            <span class="scenario-stat-label">4. Critical Equipment Continuity</span>
+            <span class="scenario-stat-val" style="color: #10b981;">100.0%</span>
+          </div>
+          <div class="scenario-stat-row">
+            <span class="scenario-stat-label">5. Telemetry Data Quality</span>
+            <span class="scenario-stat-val" style="color: #10b981;">98.9% PRR</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Optimized Scenario Card -->
+      <section class="scenario-card optimized levitate-delay-2">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span class="scenario-badge">CampusPulse AI Optimized</span>
+          <span class="header-badge-tag" style="background: rgba(16, 185, 129, 0.15); color: #10b981; font-weight: 800;">Target Achieved</span>
+        </div>
+        <h2 style="font-size: 1.4rem; font-weight: 800; color: #10b981; margin-top: 0.25rem;">Safe Ceiling Compliant</h2>
+        <p style="font-size: 0.84rem; color: var(--text-secondary); margin-top: 0.25rem; line-height: 1.5;">
+          Predictive chiller setpoint ramp (+2°C), staggered hostel geyser cycling, and prototype low-voltage shedding with locked research equipment.
+        </p>
+
+        <div class="scenario-stat-list">
+          <div class="scenario-stat-row">
+            <span class="scenario-stat-label">1. Peak Net Demand</span>
+            <span class="scenario-stat-val" style="color: #10b981;">982.0 kW (-21.1%)</span>
+          </div>
+          <div class="scenario-stat-row">
+            <span class="scenario-stat-label">2. Daily Electricity Cost</span>
+            <span class="scenario-stat-val" style="color: #10b981;">₹1,21,200 (-18.4%)</span>
+          </div>
+          <div class="scenario-stat-row">
+            <span class="scenario-stat-label">3. Max Demand Penalty Surcharge</span>
+            <span class="scenario-stat-val" style="color: #10b981;">₹0 (AVOIDED 100%)</span>
+          </div>
+          <div class="scenario-stat-row">
+            <span class="scenario-stat-label">4. Critical Equipment Continuity</span>
+            <span class="scenario-stat-val" style="color: #10b981;">100.0% (LOCKED)</span>
+          </div>
+          <div class="scenario-stat-row">
+            <span class="scenario-stat-label">5. Telemetry Data Quality</span>
+            <span class="scenario-stat-val" style="color: #10b981;">98.9% PRR</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Comparative Visual Charts -->
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-top: 1.75rem;">
+      <section class="float-card levitate-delay-1">
+        <div class="card-header-bar">
+          <div class="card-title-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+            <h2>Baseline vs. Optimized Peak Demand by Zone (kW)</h2>
+          </div>
+          <span class="header-badge-tag">Comparative Metric</span>
+        </div>
+        <div style="position: relative; height: 300px; width: 100%; margin-top: 0.75rem;">
+          <canvas id="beforeAfterComparisonChart"></canvas>
+        </div>
+      </section>
+
+      <section class="float-card levitate-delay-2">
+        <div class="card-header-bar">
+          <div class="card-title-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            <h2>Monthly Cost Savings by Zone</h2>
+          </div>
+          <span class="header-badge-tag">₹ / Month</span>
+        </div>
+        <div style="position: relative; height: 300px; width: 100%; margin-top: 0.75rem;">
+          <canvas id="zoneSavingsDonutChart"></canvas>
+        </div>
+      </section>
+    </div>
+
+    <!-- Dynamic Time-of-Day (ToD) Tariff & ROI Calculator -->
+    <section class="float-card levitate-delay-3" style="margin-top: 2rem;">
+      <div class="card-header-bar">
+        <div class="card-title-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <h2>Interactive Campus Time-of-Day (ToD) Tariff & ROI Calculator</h2>
+        </div>
+        <span class="header-badge-tag">Dynamic Simulation Model</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1.25rem;">
+        <!-- Input Sliders -->
+        <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.35rem;">
+              <span>Peak Hours Tariff (17:00 – 22:00)</span>
+              <span id="valCalcPeak" style="color: #f43f5e; font-family: monospace;">₹9.50 / kWh</span>
+            </div>
+            <input type="range" id="calcPeakTariff" min="7.0" max="15.0" step="0.25" value="9.50" style="width: 100%; cursor: pointer;">
+          </div>
+
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.35rem;">
+              <span>Off-Peak / Normal Tariff</span>
+              <span id="valCalcNormal" style="color: #0284c7; font-family: monospace;">₹7.20 / kWh</span>
+            </div>
+            <input type="range" id="calcNormalTariff" min="5.0" max="10.0" step="0.20" value="7.20" style="width: 100%; cursor: pointer;">
+          </div>
+
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.35rem;">
+              <span>Flexible Load Shedding Engagement</span>
+              <span id="valCalcFlex" style="color: #10b981; font-family: monospace;">20%</span>
+            </div>
+            <input type="range" id="calcFlexiblePct" min="10" max="35" step="1" value="20" style="width: 100%; cursor: pointer;">
+          </div>
+
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.35rem;">
+              <span>Campus Monitored Buildings</span>
+              <span id="valCalcBldg" style="color: var(--text-main); font-family: monospace;">6 Buildings</span>
+            </div>
+            <input type="range" id="calcBldgCount" min="4" max="25" step="1" value="6" style="width: 100%; cursor: pointer;">
+          </div>
+        </div>
+
+        <!-- Calculated Outputs -->
+        <div style="background: var(--bg-secondary); border-radius: 16px; padding: 1.5rem; border: 1px solid var(--border-subtle); display: flex; flex-direction: column; justify-content: space-between;">
+          <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--text-main);">Projected Campus Savings Summary</h3>
+          
+          <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-top: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem;">
+              <span style="font-size: 0.86rem; color: var(--text-secondary);">Peak Demand Curtailed:</span>
+              <strong style="font-size: 1.15rem; font-family: var(--font-mono); color: #10b981;" id="resCalcShavedKW">246 kW</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem;">
+              <span style="font-size: 0.86rem; color: var(--text-secondary);">Estimated Daily Cost Saved:</span>
+              <strong style="font-size: 1.15rem; font-family: var(--font-mono); color: #0284c7;" id="resCalcDailySaved">₹1,980</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem;">
+              <span style="font-size: 0.86rem; color: var(--text-secondary);">Monthly Demand Surcharge Avoided:</span>
+              <strong style="font-size: 1.15rem; font-family: var(--font-mono); color: #10b981;" id="resCalcMonthlySaved">₹1,55,400</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.25rem;">
+              <span style="font-size: 0.95rem; font-weight: 700; color: var(--text-main);">Projected Annual Campus Savings:</span>
+              <strong style="font-size: 1.4rem; font-family: var(--font-mono); color: #10b981;" id="resCalcAnnualSaved">₹18,64,800</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Environmental Sustainability Report Banner -->
+    <div class="sustainability-banner levitate-delay-2">
+      <div class="green-metric-item">
+        <div class="green-metric-icon">🌱</div>
+        <div class="green-metric-info">
+          <h3>2,410 kg</h3>
+          <p>Daily CO2 Avoided</p>
+        </div>
+      </div>
+
+      <div class="green-metric-item">
+        <div class="green-metric-icon">🌲</div>
+        <div class="green-metric-info">
+          <h3>108 Trees</h3>
+          <p>Equivalent Monthly Trees Planted</p>
+        </div>
+      </div>
+
+      <div class="green-metric-item">
+        <div class="green-metric-icon">☀️</div>
+        <div class="green-metric-info">
+          <h3>96.8%</h3>
+          <p>Solar Self-Consumption Rate</p>
+        </div>
+      </div>
+
+      <div class="green-metric-item">
+        <div class="green-metric-icon">⭐</div>
+        <div class="green-metric-info">
+          <h3>Grade A+</h3>
+          <p>Green Campus Transition Rating</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Zone Financial Breakdown Table -->
+    <section class="float-card levitate-delay-3" style="margin-top: 2rem;">
+      <div class="card-header-bar">
+        <div class="card-title-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <h2>Building-Wise Financial Optimization & Peak Reduction Matrix</h2>
+        </div>
+        <span class="header-badge-tag">Audited Breakdown</span>
+      </div>
+
+      <div style="overflow-x: auto; margin-top: 1rem;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+          <thead>
+            <tr style="border-bottom: 2px solid var(--border-subtle); font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">
+              <th style="padding: 0.85rem 1rem;">Campus Zone</th>
+              <th style="padding: 0.85rem 1rem;">Baseline Peak</th>
+              <th style="padding: 0.85rem 1rem;">Optimized Peak</th>
+              <th style="padding: 0.85rem 1rem;">Reduction</th>
+              <th style="padding: 0.85rem 1rem;">Rooftop Solar Yield</th>
+              <th style="padding: 0.85rem 1rem;">Monthly Cost Saved</th>
+              <th style="padding: 0.85rem 1rem;">Data Quality</th>
+            </tr>
+          </thead>
+          <tbody id="zoneFinancialTableBody">
+            <!-- Dynamically populated via sustainability-calc.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="global-footer">
+    <div class="footer-inner">
+      <div>
+        <strong>CampusPulse AI</strong> &mdash; Financial Optimization & Sustainability Terminal
+      </div>
+      <div class="footer-system-badges">
+        <div class="footer-badge-item">
+          <span class="status-dot online"></span>
+          <span>ROI Model: Time-of-Day (ToD)</span>
+        </div>
+        <div class="footer-badge-item">
+          <span class="status-dot online"></span>
+          <span>Continuity Assurance: 100%</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script src="js/sustainability-calc.js"></script>
+</body>
+</html>
